@@ -5,10 +5,77 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if (!CursorHit.bBlockingHit) return;
+
+	LastActor = ThisActor;
+	ThisActor = CursorHit.GetActor();
+
+	/*
+	 * Line trace from Cursor.
+	 * 1. Last is null && This is null
+	 *		- Do nothing.
+	 * 2. Last is null && This is Vaild
+	 *		- Highlight This
+	 * 3. Last is Valid && This is null
+	 *		- UnHighlight Last
+	 * 4. Both are Valid, But Last != This
+	 *		- UnHightlight Last && Highlight This
+	 * 5. Both are Valid && Last == This
+	 *		- Do nothing.
+	 */
+	if (LastActor == nullptr)
+	{
+		if (ThisActor != nullptr)
+		{
+			// Case 2.
+			ThisActor->HighlightActor();
+		}
+		else
+		{
+			// Case 1.
+			// Do nothing.
+		}
+	}
+	else
+	{
+		if (ThisActor == nullptr)
+		{
+			// Case 3.
+			LastActor->UnHighlightActor();
+		}
+		else 
+		{
+			if (ThisActor != LastActor)
+			{
+				// Case 4.
+				LastActor->UnHighlightActor();
+				ThisActor->HighlightActor();
+			}
+			else
+			{
+				// Case 5.
+				// Do nothing.
+			}
+		}
+	}
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -58,3 +125,4 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
 }
+
