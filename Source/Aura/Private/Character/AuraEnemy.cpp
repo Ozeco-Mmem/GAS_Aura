@@ -13,6 +13,7 @@ AAuraEnemy::AAuraEnemy()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 	
@@ -36,4 +37,13 @@ void AAuraEnemy::UnHighlightActor()
 
 	// Unhighlight Weapon
 	Weapon->SetRenderCustomDepth(false);
+}
+
+
+void AAuraEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Init ASC Actor<Server & Client> : Owner = Avatar = this 
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
