@@ -28,9 +28,9 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	InitAbilityActorInfo();
 }
 
-void AAuraCharacter::OnRep_Controller()
+void AAuraCharacter::OnRep_PlayerState()
 {
-	Super::OnRep_Controller();
+	Super::OnRep_PlayerState();
 
 	// Init ASC actor<Client>
 	InitAbilityActorInfo();
