@@ -46,6 +46,9 @@ protected:
 	void OnEndOverlap(AActor* TargetActor);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effects")
+	float ActorLevel = 1.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effects")
 	bool bDestroyedOnEffectRemoval = false;
 
 	// Instance Effect
@@ -73,4 +76,5 @@ protected:
 	EEffectRemovalPolicy InfiniteEffectRemovalPolicy = EEffectRemovalPolicy::RemoveOnEndOverlap;
 
 	TMap<FActiveGameplayEffectHandle , UAbilitySystemComponent*> ActiveEffectHandles;
+
 };
