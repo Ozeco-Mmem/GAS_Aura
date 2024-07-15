@@ -43,7 +43,12 @@ void AAuraEnemy::UnHighlightActor()
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	InitAbilityActorInfo();
+}
 
+void AAuraEnemy::InitAbilityActorInfo()
+{
 	// Init ASC Actor<Server & Client> : Owner = Avatar = this 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
